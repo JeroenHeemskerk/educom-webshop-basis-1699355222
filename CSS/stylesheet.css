@@ -1,6 +1,10 @@
 * {
     font-family:"Avenir";
-    background-color: coral;
+    max-width: 800px;
+}
+
+header {
+    min-width: 48px;
 }
 
 h1 {
@@ -11,39 +15,65 @@ h1 {
 .menu {
     list-style-type: none;
     display:flex;
-    padding: 0;
-
+    padding: 0px;
 }
 
 li {
-    margin-right: 20px;
+    margin-right: 10px;
 }
   
 a {
     color: white;
     text-decoration: none;
-    background-color: lightpink;
-    border-radius: 8px;
+    background-color:cornflowerblue;
+    border: 4px cornflowerblue;
+    border-radius: 4px;
+    padding: 6px;
 }
 
 a:hover {
-    color:darkred
+    color:darkred;
+}
 
+div {
+    color: darkgray;
+    font-size: 12px;
+    background-color: white;
+}
+
+::placeholder, .sel {
+    font-size: 11px;
+    color:rgba(53, 51, 51, 0.812);
+}
+
+footer {
+    background-color: black;
+    color: white;
+    font-size: 10px;
+    height: 48px;
+    text-align: right;
 }
 
 .auteur {
-    color: black;
+    color: white;
     font-style: italic;
-    background-color: coral;
+    background-color: black;
+    padding: 0px;
+    margin-right:10px;
 }
 
 .auteur:hover {
-    color: white;
+    color: cornflowerblue;
     background-color: none;
 }
 
 input, select, textarea {
     background-color:white;
+    font-size: 12px;
+}
+
+.sw {
+    width: 400px;
 }
 
 .knop {
