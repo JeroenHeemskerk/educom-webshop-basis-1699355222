@@ -1,1 +1,56 @@
-/* Cascade Style Sheet for this website */
+* {
+    font-family:"Avenir";
+    background-color: coral;
+}
+
+h1 {
+    color:crimson;
+    font-family:"Avenir";
+}
+
+.menu {
+    list-style-type: none;
+    display:flex;
+    padding: 0;
+
+}
+
+li {
+    margin-right: 20px;
+}
+  
+a {
+    color: white;
+    text-decoration: none;
+    background-color: lightpink;
+    border-radius: 8px;
+}
+
+a:hover {
+    color:darkred
+
+}
+
+.auteur {
+    color: black;
+    font-style: italic;
+    background-color: coral;
+}
+
+.auteur:hover {
+    color: white;
+    background-color: none;
+}
+
+input, select, textarea {
+    background-color:white;
+}
+
+.knop {
+    border-radius: 8px;
+}
+
+.knop:hover {
+    color: white;
+    background-color: crimson;
+}
