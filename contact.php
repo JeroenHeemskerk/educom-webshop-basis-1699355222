@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="http://localhost:80/educom-webshop-basis-1699355222/CSS/stylesheet.css">
+        <link rel="stylesheet" href="CSS/stylesheet.css">
     </head>
     <body>
     <div class="center">    
@@ -9,11 +9,11 @@
     <h1>Contact</h1>
     </header>        
     <nav> 
-        <ul class="menu">
-                <li><a href="//localhost:80/educom-webshop-basis-1699355222/index.html">Startpagina</a></li>
-                <li><a href="//localhost:80/educom-webshop-basis-1699355222/about.html">Over mij</a></li>
-                <li><a href="//localhost:80/educom-webshop-basis-1699355222/contact.php">Contact</a></li>
-            </ul>
+    <ul class="menu"> 
+        <li><a href="index.html">Startpagina</a></li> 
+        <li><a href="about.html">Over mij</a></li> 
+        <li><a href="contact.php">Contact</a></li> 
+    </ul>
     </nav>
  <?php
       $name = $_POST['firstname'];
