@@ -19,10 +19,10 @@ function getRequestedPage ()
 
 function showResponsePage($page)
 {
-    echo '<!doctype html><html>' . PHP_EOL;                
+    echo '<!doctype html><html>' . PHP_EOL;                //beginDocument
     showHeadSection();              
     showBodySection($page);
-    echo '</html>' . PHP_EOL;
+    echo '</html>' . PHP_EOL;                               //endDocument
 }
 
 function getArrayVar($array, $key, $default=' ')
@@ -35,33 +35,38 @@ function getPostVar($key, $default=' ')
     return getArrayVar($_POST, $key, $default);
 } 
 
-function getUrlVar($key, $default=' ')
+function getUrlVar($key, $default=' ')              
 {
-    return getArrayVar($_POST, $key, $default);
+    return getArrayVar($_GET, $key, $default);
 } 
 
 function showHeadSection ()
 {
     echo '<head>' . PHP_EOL;             
-    echo '<link rel="stylesheet" href="CSS/stylesheet.css">' . PHP_EOL;              
+    showCssFile();           
     echo '</head>' . PHP_EOL;   
+}
+
+function showCssFile ()
+{
+    echo '<link rel="stylesheet" href="CSS/stylesheet.css">' . PHP_EOL;
 }
 
 function showBodySection($page)
 {
-    echo '  <body>' . PHP_EOL;             
+    echo '  <body>' . PHP_EOL;         //openBody    
     showHeader($page);           
     showMenu();             
     showContent($page);          
     showFooter();           
-    echo '  </body.' . PHP_EOL;            
+    echo '  </body.' . PHP_EOL;         //closeBody        
 }
 
 function showHeader($page)
 {
-    echo '<header>' . PHP_EOL;       
+    echo '<header>' . PHP_EOL;          //openHeader
     showHeaderContent($page);            
-    echo '</header>' . PHP_EOL;                
+    echo '</header>' . PHP_EOL;         //closeHeader
 }
 
 function showHeaderContent ($page)
@@ -69,16 +74,16 @@ function showHeaderContent ($page)
     switch ($page)
     {
         case 'home':
-            require('home.php');
-            showHomeHeader();      //Heb ik nu in home.php als functie
+            require_once ('home.php');  
+            showHomeHeader(); 
             break;
         case 'about':
-            require('about.php');
-            showAboutHeader();     //functie nog coden ?Waar moet je die coderen?
+            require_once ('about.php');
+            showAboutHeader();     
             break;
         case 'contact':
-            require('contact.php');
-            showContactHeader();   //functie nog coden ?Waar moet je die coderen?
+            require_once ('contact.php');
+            showContactHeader();
             break;
         default:
             echo '<p>Pagina niet gevonden</P>';
@@ -94,7 +99,11 @@ function showMenu()
 
 function showNavigateList()
 {
-    include 'menu.php';
+    echo    '<ul class="menu"> 
+            <li><a href="index.php?page=home">Startpagina</a></li>  
+            <li><a href="index.php?page=about">Over mij</a></li> 
+            <li><a href="index.php?page=contact">Contact</a></li>
+            </ul>';            
 }
 
 function showContent($page)
@@ -102,47 +111,27 @@ function showContent($page)
     switch ($page)
     {
         case 'home':
-            require('home.php');
-            showHomeContent();      //functie nog coden  > ik moet even weten wat er precies gebeurt
+            require_once('home.php');           
+            showHomeContent();      
             break;
         case 'about':
-            require('about.php');
-            showAboutContent();     //functie nog coden > ik moet even weten wat er precies gebeurt
+            require_once('about.php');
+            showAboutContent();     
             break;
         case 'contact':
-            require('contact.php');
-            showContactContent();   //functie nog coden > ik moet even weten wat er precies gebeurt
+            require_once('contact.php');
+            showContactContent();                   //functie nog afmaken in contact.php
             break;
         default:
             echo '<p>Pagina niet gevonden</P>';
     }
 }
 
-function showHomeConent()
-{
-    include 'home.php';
-}
-
-function showAboutContent()
-{
-    include 'about.php';
-}
-
-function showContactContent()
-{
-    include 'contact.php';
-}
-
 function showFooter()           
 {
     echo '<footer>' . PHP_EOL;                   
-    showFooterContent();             
+    echo '<p>&copy; 2023 Nicole Goris</p>';              
     echo '</footer>' . PHP_EOL;               
-}
-
-function showFooterContent()
-{
-    include 'footer.php';
 }
 
 ?>

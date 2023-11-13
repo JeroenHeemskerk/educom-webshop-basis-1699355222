@@ -7,7 +7,7 @@ function showHomeHeader()
 
 function showHomeContent()
 {
-    echo '<div>
+    echo '<div class="center">
             <p>
                 Welkom op mijn site. Vanuit deze pagina kunt u makkelijk naar 
                 over mij om meer te weten te komen over wie Nicole eigenlijk is. 
@@ -15,7 +15,9 @@ function showHomeContent()
             </p>
         </div>';
 }
+?>
 
+<?php
 /*
 <!DOCTYPE html>
 <html>
@@ -48,5 +50,4 @@ function showHomeContent()
     </body>    
 </html>
 */
-
 ?>
