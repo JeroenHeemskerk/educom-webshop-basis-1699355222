@@ -1,4 +1,11 @@
-<!DOCTYPE html>
+<?php
+
+function showContactHeader()
+{ 
+    echo '<h1>Contact</h1>';
+}
+
+/*<!DOCTYPE html>
 <html>
     <head>
         <link rel="stylesheet" href="CSS/stylesheet.css">
@@ -206,4 +213,6 @@
         </footer>
     </div>
     </body> 
-</html>
+</html> */
+
+?>
