@@ -2,20 +2,30 @@
 
 function showContactHeader()
 { 
-    echo '<h1>Contact</h1>';
+    echo '<h1>Contact</h1>' . PHP_EOL;
 }
 
-/*<!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" href="CSS/stylesheet.css">
-    </head>
-<?php
- $salut = $name = $com = $email = $phone = $street = $strnr = $zpcd = $resid = $message = ""; 
- $salutErr = $nameErr = $comErr = $emailErr = $phoneErr = $streetErr = $strnrErr = $zpcdErr = $residErr = $messageErr = ""; 
- $valid = false;
+function showContactContent ()
+{
+    // declareVar
+    $salut = $name = $com = $email = $phone = $street = $strnr = $zpcd = $resid = $message = ""; 
+    $salutErr = $nameErr = $comErr = $emailErr = $phoneErr = $streetErr = $strnrErr = $zpcdErr = $residErr = $messageErr = ""; 
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $valid = false;
+
+    //varifyRequest
+    if ($_SERVER["REQUEST_METHOD"] == "POST") 
+    {
+        initiateValidation ();
+    }
+   
+    //* else ($_SERVER["REQUEST_METHOD"] == "GET") 
+    //{
+    //    showForm ();
+    //} */
+    
+    function initiateValidation()
+    {
         if (empty($_POST["salut"])) {                       
             $salutErr = "Aanhef is verplicht";
         } else {
@@ -136,83 +146,75 @@ function showContactHeader()
             }
         }
         if (empty($salutErr) && empty($nameErr) && empty($comErr) && empty($emailErr) && empty($phoneErr) && empty($streetErr) && empty($strnrErr) && empty($zpcdErr) && empty($residErr) && empty($messageErr))
-        {$valid = true;}
+        {
+            $valid = true;
+            showThanksNote ();
+        }
+        if ((!valid) || ($_SERVER["REQUEST_METHOD"] == "GET"))
+        {
+            showForm ();
+        }
     }    
-?>
-    <body>                                                             
-        <div class="center">    
-            <header>    
-                <h1>Contact</h1>
-            </header>        
-            <nav> 
-                <ul class="menu"> 
-                    <li><a href="index.html">Startpagina</a></li> 
-                    <li><a href="about.html">Over mij</a></li> 
-                    <li><a href="contact.php">Contact</a></li> 
-                </ul>
-            </nav>
-    <section>
-<?php if (!$valid) { ?>
-        <form action="contact.php" method="post">
-            <div class="invoervelden">
-                <label for="salut">Aanhef:</label>
+}
+
+function showForm ()
+{
+    echo '<form action="contact.php" method="post">
+            <div class="invoervelden">' . PHP_EOL;
+    echo '      <label for="salut">Aanhef:</label>
                     <select class="sel" id="salut" name="salut">
-                        <option value=""></option> 
-                        <option value="man" <?php if ($salut == "man") { echo 'selected="selected"'; } ?>>Dhr.</option>
-                        <option value="woman" <?php if ($salut == "woman") { echo 'selected="selected"'; } ?>>Mvr.</option>
-                        <option value="different" <?php if ($salut == "different") { echo 'selected="selected"'; } ?>>Anders</option>
+                        <option value=""></option>  
+                        <option value="man">'; if ($salut == "man") { echo 'selected="selected"'; } echo '>Dhr.</option>
+                        <option value="woman"'; if ($salut == "woman") { echo 'selected="selected"'; } echo '>Mvr.</option>
+                        <option value="different"'; if ($salut == "different") { echo 'selected="selected"'; } echo '>Anders</option>
                     </select>
-                        <span class="error"> <?php echo $salutErr;?></span><br> 
+                        <span class="error">'; echo $salutErr; echo '</span><br> 
                 <label for="fname">Naam:</label>
-                    <input class="sw" type="text" id="fname" name="firstname" placeholder="Typ hier uw naam" value="<?php echo $name;?>">
-                    <span class="error"> <?php echo $nameErr;?></span><br>                
+                    <input class="sw" type="text" id="fname" name="firstname" placeholder="Typ hier uw naam" value="'; echo $name; echo '">
+                    <span class="error">'; echo $nameErr; echo '</span><br>                
                 <label for="email">E-mailadres:</label>
-                    <input class="sw" type="text" id="email" name="emailadress" placeholder="Typ hier uw e-mailadres" value="<?php echo $email;?>" > 
-                    <span class="error"> <?php echo $emailErr;?></span><br>
+                    <input class="sw" type="text" id="email" name="emailadress" placeholder="Typ hier uw e-mailadres" value="'; echo $email; echo '" > 
+                    <span class="error">'; echo $emailErr; echo '</span><br>
                 <label for="phone">Telefoonnummer:</label>
-                    <input class="sw" type="text" id="phone" name="phonenumber" placeholder="Typ hier uw telefoonnummer" value="<?php echo $phone;?>">
-                    <span class="error"> <?php echo $phoneErr;?></span><br>
+                    <input class="sw" type="text" id="phone" name="phonenumber" placeholder="Typ hier uw telefoonnummer" value="'; echo $phone; echo '">
+                    <span class="error">'; echo $phoneErr; echo '</span><br>
                 <label for="street">Straatnaam</label>
-                    <input class="sw" type="text" id="street" name="streetname" placeholder="Typ hier uw straat" value="<?php echo $street;?>"> 
-                    <span class="error"> <?php echo $streetErr;?></span><br>
+                    <input class="sw" type="text" id="street" name="streetname" placeholder="Typ hier uw straat" value="'; echo $street; echo '"> 
+                    <span class="error">'; echo $streetErr;echo '</span><br>
                 <label for="strnr">Huisnummer</label>
-                    <input class="sw" type="text" id="strnr" name="strnr" placeholder="Typ hier uw huisnummer" value="<?php echo $strnr;?>">
-                    <span class="error"> <?php echo $strnrErr;?></span><br>
+                    <input class="sw" type="text" id="strnr" name="strnr" placeholder="Typ hier uw huisnummer" value="'; echo $strnr; echo '">
+                    <span class="error">'; echo $strnrErr; echo '</span><br>
                 <label for="zpcd">Postcode</label>
-                    <input class="sw" type="text" id="zpcd" name="zpcd" placeholder="Typ hier uw postcode als 1234 AB" value="<?php echo $zpcd;?>">
-                    <span class="error"> <?php echo $zpcdErr;?></span><br>
+                    <input class="sw" type="text" id="zpcd" name="zpcd" placeholder="Typ hier uw postcode als 1234 AB" value="'; echo $zpcd; echo '">
+                    <span class="error">'; echo $zpcdErr; echo '</span><br>
                 <label for="resid">Woonplaats</label>
-                    <input class="sw" type="text" id="resid" name="resid" placeholder="Typ hier uw woonplaats" value="<?php echo $resid;?>">
-                    <span class="error"> <?php echo $residErr;?></span><br>
+                    <input class="sw" type="text" id="resid" name="resid" placeholder="Typ hier uw woonplaats" value="'; echo $resid; echo '">
+                    <span class="error">'; echo $residErr; echo '</span><br>
                 <br>   
             </div>
             <div>
-            Kies uw communicatievoorkeur:<span class="error"> <?php echo $comErr;?></span><br>
-                <input type="radio" id="com_email" name="com" value="E-mail" <?php if ($com =="E-mail") echo 'checked = "checked"';?>>
+            Kies uw communicatievoorkeur:<span class="error">'; echo $comErr; echo '</span><br>
+                <input type="radio" id="com_email" name="com" value="E-mail"'; if ($com =="E-mail") echo 'checked = "checked"'; echo '>
                     <label for="com_email">E-mail</label><br>
-                <input type="radio" id="phone" name="com" value="Phone" <?php if ($com =="Phone") echo 'checked = "checked"';?>>
+                <input type="radio" id="phone" name="com" value="Phone"'; if ($com =="Phone") echo 'checked = "checked"'; echo '>
                     <label for="phone">Telefoon</label><br>
-                <input type="radio" id="mail" name="com" value="Mail" <?php if ($com =="Mail") echo 'checked = "checked"';?>>
+                <input type="radio" id="mail" name="com" value="Mail"'; if ($com =="Mail") echo 'checked = "checked"'; echo '>
                     <label for="mail">Post</label><br>
                 <br>
             </div>
             <div class="invoervelden">    
             Waarover wilt u contact opnemen?<br>
-                <textarea class="sw" name="message" rows="4" cols="53" placeholder="Typ hier uw vraag"><?php echo $message;?></textarea>
-                <span class="error"> <?php echo $messageErr;?></span><br>
+                <textarea class="sw" name="message" rows="4" cols="53" placeholder="Typ hier uw vraag">'; echo $message; echo '</textarea>
+                <span class="error">'; echo $messageErr; echo '</span><br>
                 <br>
                 <input class="knop" type="submit" Value="Verstuur">
             </div>    
-        </form>
-<?php } else { ?>
-        <p> Uw reactie is verzonden. Bedankt voor het invullen!</p>
-<?php } ?>
-    </section>
-        <footer>
-            <p>&copy; 2023 <a class="auteur" href="//localhost:80/educom-webshop-basis-1699355222/about.html">Nicole Goris</a></p>
-        </footer>
-    </div>
-    </body> 
-</html> */
+        </form>';
+}
+
+function showThanksNote () 
+{ 
+    echo '<p> Uw reactie is verzonden. Bedankt voor het invullen!</p>';
+}
 
 ?>
