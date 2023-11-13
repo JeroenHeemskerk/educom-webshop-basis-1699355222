@@ -18,13 +18,14 @@ function showContactContent ()
     {
         initiateValidation ();
     }
-   
-    //* else ($_SERVER["REQUEST_METHOD"] == "GET") 
-    //{
-    //    showForm ();
-    //} */
+    else 
+    { 
+        showForm ();
+    }
     
-    function initiateValidation()
+}
+
+function initiateValidation()
     {
         if (empty($_POST["salut"])) {                       
             $salutErr = "Aanhef is verplicht";
@@ -150,16 +151,15 @@ function showContactContent ()
             $valid = true;
             showThanksNote ();
         }
-        if ((!valid) || ($_SERVER["REQUEST_METHOD"] == "GET"))
+        if (!($valid))
         {
             showForm ();
         }
     }    
-}
 
 function showForm ()
 {
-    echo '<form action="contact.php" method="post">
+    echo '<form action="contact.php" method="POST">
             <div class="invoervelden">' . PHP_EOL;
     echo '      <label for="salut">Aanhef:</label>
                     <select class="sel" id="salut" name="salut">

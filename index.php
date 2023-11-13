@@ -120,7 +120,7 @@ function showContent($page)
             break;
         case 'contact':
             require_once('contact.php');
-            showContactContent();                   //functie nog afmaken in contact.php
+            showContactContent();                   //form werkt nog niet
             break;
         default:
             echo '<p>Pagina niet gevonden</P>';

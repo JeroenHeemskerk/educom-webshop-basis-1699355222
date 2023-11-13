@@ -1,5 +1,9 @@
 * {
     font-family:"Avenir";
+}
+
+.center {
+    margin: auto;
     max-width: 800px;
 }
 
@@ -83,4 +87,8 @@ input, select, textarea {
 .knop:hover {
     color: white;
     background-color: crimson;
+}
+
+.error {
+    color: red;
 }
