@@ -92,19 +92,31 @@ function showHeaderContent ($page)
 
 function showMenu()
 {  
+    $variables['menu']= array('home' => 'Startpagina', 'about' => 'Over mij', 'contact' => 'Contact');
     echo '<nav>' . PHP_EOL;         
-    showNavigateList(); 
+    showNavigateList($variables); 
     echo '</nav>' . PHP_EOL;
 }
 
-function showNavigateList()
+function showNavigateList($variables)
 {
-    echo    '<ul class="menu"> 
-            <li><a href="index.php?page=home">Startpagina</a></li>  
-            <li><a href="index.php?page=about">Over mij</a></li> 
-            <li><a href="index.php?page=contact">Contact</a></li>
-            </ul>';            
+    echo    '<ul class="menu">';
+    foreach ($variables['menu'] as $link => $label) 
+    {
+        showNavigateItem($link, $label);
+    }
+    echo    '</ul>';           // Dit moet anders worden in plaats van de losse items de functie showNavigateItem($link, $label);
 }
+
+          /*<li><a href="index.php?page=home">Startpagina</a></li>  
+            <li><a href="index.php?page=about">Over mij</a></li> 
+            <li><a href="index.php?page=contact">Contact</a></li> */
+
+function showNavigateItem($link, $label) 
+{
+        echo '<li><a href="index.php?page=' . $link . '">' . $label . '</a></li>';
+}     
+   
 
 function showContent($page)
 {
@@ -120,7 +132,7 @@ function showContent($page)
             break;
         case 'contact':
             require_once('contact.php');
-            showContactContent();                   //form werkt nog niet
+            showContactContent();                   //functies in post request werken nog niet
             break;
         default:
             echo '<p>Pagina niet gevonden</P>';
