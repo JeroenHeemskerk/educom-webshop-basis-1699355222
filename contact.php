@@ -8,14 +8,33 @@ function showContactHeader()
 function showContactContent ()
 {
     // declareVar
+    $contact = array("salut"=>"", "name"=>"", "com"=>"", "email"=>"", "phone"=>"", "street"=>"", "strnr"=>"", "zpcd"=>"", "resid"=>"", "message"=>""); 
+
     $salut = $name = $com = $email = $phone = $street = $strnr = $zpcd = $resid = $message = ""; 
-    $salutErr = $nameErr = $comErr = $emailErr = $phoneErr = $streetErr = $strnrErr = $zpcdErr = $residErr = $messageErr = ""; 
+    $salutErr = $nameErr = $comErr = $emailErr = $phoneErr = $streetErr = $strnrErr = $zpcdErr = $residErr = $messageErr = "Error"; 
 
     $valid = false;
 
     //varifyRequest
     if ($_SERVER["REQUEST_METHOD"] == "POST") 
     {
+        $salut = test_input($_POST["salut"]);
+        $name = test_input($_POST["name"]);
+        $com = test_input($_POST["com"]);
+        $email = test_input($_POST["email"]);
+        $phone = test_input($_POST["phone"]);
+        $street = test_input($_POST["street"]);
+        $strnr = test_input($_POST["strnr"]);
+        $zpcd = test_input($_POST["zpcd"]);
+        $resid = test_input($_POST["resid"]);
+        $message = test_input($_POST["message"]);
+    }
+    function test_input($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+      }
         initiateValidation ();
     }
     else 
@@ -27,6 +46,8 @@ function showContactContent ()
 
 function initiateValidation()
     {
+        $pstIncomplete = !empty($_POST['street']) || !empty($_POST['strnr']) ||  !empty($_POST['zpcd']) || !empty($_POST['resid']);
+
         if (empty($_POST["salut"])) {                       
             $salutErr = "Aanhef is verplicht";
         } else {
@@ -49,7 +70,7 @@ function initiateValidation()
             $comErr = "Communicatievoorkeur is verplicht";
                 $email = $_POST['emailadress'];                              
                 $phone = $_POST['phonenumber'];
-                $street = $_POST ['streetname'];
+                $street = $_POST ['street'];
                 $strnr = $_POST ['strnr'];
                 $zpcd = $_POST['zpcd'];
                 $resid = $_POST['resid'];
@@ -60,21 +81,21 @@ function initiateValidation()
             if (empty($_POST["emailadress"])) {
                 $emailErr = "E-mailadres is verplicht";
                 $phone = $_POST['phonenumber'];
-                $street = $_POST ['streetname'];
+                $street = $_POST ['street'];
                 $strnr = $_POST ['strnr'];
                 $zpcd = $_POST['zpcd'];
                 $resid = $_POST['resid'];
-                if (!empty($_POST["streetname"]) || !empty($_POST["strnr"]) || !empty($_POST["zpcd"]) || !empty($_POST["resid"])) {
+                if ($pstIncomplete) {
                     $streetErr = $strnrErr = $zpcdErr = $residErr = "Uw adresgegevens zijn niet volledig";
                 }
             } else {
                 $email = $_POST['emailadress'];                              
                 $phone = $_POST['phonenumber'];
-                $street = $_POST ['streetname'];
+                $street = $_POST ['street'];
                 $strnr = $_POST ['strnr'];
                 $zpcd = $_POST['zpcd'];
                 $resid = $_POST['resid'];
-                if (!empty($_POST["streetname"]) || !empty($_POST["strnr"]) || !empty($_POST["zpcd"]) || !empty($_POST["resid"])) {
+                if ($pstIncomplete) {
                     $streetErr = $strnrErr = $zpcdErr = $residErr = "Uw adresgegevens zijn niet volledig";
                 }
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -86,21 +107,21 @@ function initiateValidation()
             if (empty($_POST["phonenumber"])) {
                 $phoneErr = "Telefoonnummer is verplicht";
                 $email = $_POST['emailadress'];                              
-                $street = $_POST ['streetname'];
+                $street = $_POST ['street'];
                 $strnr = $_POST ['strnr'];
                 $zpcd = $_POST['zpcd'];
                 $resid = $_POST['resid'];
-                if (!empty($_POST["streetname"]) || !empty($_POST["strnr"]) || !empty($_POST["zpcd"]) || !empty($_POST["resid"])) {
+                if ($pstIncomplete) {
                     $streetErr = $strnrErr = $zpcdErr = $residErr = "Uw adresgegevens zijn niet volledig";
                 }
             } else {
                 $email = $_POST['emailadress'];                              
                 $phone = $_POST['phonenumber'];
-                $street = $_POST ['streetname'];
+                $street = $_POST ['street'];
                 $strnr = $_POST ['strnr'];
                 $zpcd = $_POST['zpcd'];
                 $resid = $_POST['resid'];
-                if (!empty($_POST["streetname"]) || !empty($_POST["strnr"]) || !empty($_POST["zpcd"]) || !empty($_POST["resid"])) {
+                if ($pstIncomplete) {
                     $streetErr = $strnrErr = $zpcdErr = $residErr = "Uw adresgegevens zijn niet volledig";
                 }
                 if (!preg_match('/^[0-9 -+]+$/', $phone)) { 
@@ -108,11 +129,12 @@ function initiateValidation()
                 }
             }     
         }
+        
         else if ($com == "Mail") {                              
-            if (empty($_POST["streetname"])) {                  
+            if (empty($_POST["street"])) {                  
                 $streetErr = "Staatnaam is verplicht";          
             } else {
-                $street = $_POST ['streetname'];
+                $street = $_POST ['street'];
                 $email = $_POST['emailadress'];                              
                 $phone = $_POST['phonenumber'];
             }
@@ -159,12 +181,15 @@ function initiateValidation()
 
 function showForm ()
 {
+    
+    $errors = array ("salut"=>"", "name"=>"", "com"=>"", "email"=>"", "phone"=>"", "street"=>"", "strnr"=>"", "zpcd"=>"", "resid"=>"", "message"=>"");
+
     echo '<form action="contact.php" method="POST">
             <div class="invoervelden">' . PHP_EOL;
     echo '      <label for="salut">Aanhef:</label>
                     <select class="sel" id="salut" name="salut">
                         <option value=""></option>  
-                        <option value="man">'; if ($salut == "man") { echo 'selected="selected"'; } echo '>Dhr.</option>
+                        <option value="man"'; if ($contact(salut) == "man") { echo 'selected="selected"'; } echo '>Dhr.</option>
                         <option value="woman"'; if ($salut == "woman") { echo 'selected="selected"'; } echo '>Mvr.</option>
                         <option value="different"'; if ($salut == "different") { echo 'selected="selected"'; } echo '>Anders</option>
                     </select>
@@ -179,7 +204,7 @@ function showForm ()
                     <input class="sw" type="text" id="phone" name="phonenumber" placeholder="Typ hier uw telefoonnummer" value="'; echo $phone; echo '">
                     <span class="error">'; echo $phoneErr; echo '</span><br>
                 <label for="street">Straatnaam</label>
-                    <input class="sw" type="text" id="street" name="streetname" placeholder="Typ hier uw straat" value="'; echo $street; echo '"> 
+                    <input class="sw" type="text" id="street" name="street" placeholder="Typ hier uw straat" value="'; echo $street; echo '"> 
                     <span class="error">'; echo $streetErr;echo '</span><br>
                 <label for="strnr">Huisnummer</label>
                     <input class="sw" type="text" id="strnr" name="strnr" placeholder="Typ hier uw huisnummer" value="'; echo $strnr; echo '">
