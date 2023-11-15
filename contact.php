@@ -13,26 +13,26 @@ function showContactContent ()
     //varifyRequest
     if ($_SERVER["REQUEST_METHOD"] == "POST") 
     {
-        $variables['salut'] = htmlspecialchars(getPostVar('salut'));            
-        $variables['name'] = htmlspecialchars(getPostVar('name'));
+        $variables['salut'] = (getPostVar('salut'));            
+        $variables['name'] = (getPostVar('name'));
         if (!preg_match("/^[a-zA-Z-' ]*$/",$variables['name'])) {
             $variables['nameErr'] = "U kunt hier alleen letters invullen";}        
-        $variables['com'] = htmlspecialchars(getPostVar('com'));
-        $variables['email'] = htmlspecialchars(getPostVar('email'));
-        $variables['phone'] = htmlspecialchars(getPostVar('phone'));
-        $variables['street'] = htmlspecialchars(getPostVar('street'));
-        $variables['strnr'] = htmlspecialchars(getPostVar('strnr'));
-        $variables['zpcd'] = htmlspecialchars(getPostVar('zpcd'));
-        $variables['resid'] = htmlspecialchars(getPostVar('resid'));
-        $variables['message'] = htmlspecialchars(getPostVar('message'));
+        $variables['com'] = (getPostVar('com'));
+        $variables['email'] = (getPostVar('email'));
+        $variables['phone'] = (getPostVar('phone'));
+        $variables['street'] = (getPostVar('street'));
+        $variables['strnr'] = (getPostVar('strnr'));
+        $variables['zpcd'] = (getPostVar('zpcd'));
+        $variables['resid'] = (getPostVar('resid'));
+        $variables['message'] = (getPostVar('message'));
         $variables = test_input ($variables);
-        $variables = initiateValidation ($variables);
-        }
+        $variables = initiateValidationContact($variables);
+    }
     if ($variables['valid']) {
         showThanksNote($variables);
     }
     else {
-        showForm($variables);
+        showFormContact($variables);
     }
 }
 
@@ -47,7 +47,7 @@ function test_input($variables) {
     return $results;
 }
 
-function initiateValidation($variables)
+function initiateValidationContact($variables)
 {
     if (empty($variables["salut"])) {                       
         $variables['salutErr'] = "Aanhef is verplicht";
@@ -102,7 +102,7 @@ function initiateValidation($variables)
     return $variables;
 }    
 
-function showForm ($variables)
+function showFormContact ($variables)
 {
     echo '<form action="index.php" method="POST">
             <div class="invoervelden">' . PHP_EOL;

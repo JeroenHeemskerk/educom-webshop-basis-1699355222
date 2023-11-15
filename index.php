@@ -85,6 +85,10 @@ function showHeaderContent ($page)
             require_once ('contact.php');
             showContactHeader();
             break;
+        case 'register':
+            require_once ('register.php');
+            showRegisterHeader();
+            break;
         default:
             echo '<p>Pagina niet gevonden</P>';
     }
@@ -92,7 +96,7 @@ function showHeaderContent ($page)
 
 function showMenu()
 {  
-    $variables['menu']= array('home' => 'Startpagina', 'about' => 'Over mij', 'contact' => 'Contact');  //nieuwe pagina's kunnen hier toegevoegd worden
+    $variables['menu']= array('home' => 'Startpagina', 'about' => 'Over mij', 'contact' => 'Contact', 'register' => 'Aanmelden');  //nieuwe pagina's kunnen hier toegevoegd worden
     echo '<nav>' . PHP_EOL;         
     showNavigateList($variables); 
     echo '</nav>' . PHP_EOL;
@@ -128,6 +132,10 @@ function showContent($page)
         case 'contact':
             require_once('contact.php');
             showContactContent();                   
+            break;
+        case 'register':
+            require_once ('register.php');
+            showRegisterContent();
             break;
         default:
             echo '<p>Pagina niet gevonden</P>';
