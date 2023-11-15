@@ -89,6 +89,10 @@ function showHeaderContent ($page)
             require_once ('register.php');
             showRegisterHeader();
             break;
+        case 'login':
+            require_once ('login.php');
+            showLoginHeader();
+            break;
         default:
             echo '<p>Pagina niet gevonden</P>';
     }
@@ -96,7 +100,7 @@ function showHeaderContent ($page)
 
 function showMenu()
 {  
-    $variables['menu']= array('home' => 'Startpagina', 'about' => 'Over mij', 'contact' => 'Contact', 'register' => 'Aanmelden');  //nieuwe pagina's kunnen hier toegevoegd worden
+    $variables['menu']= array('home' => 'Startpagina', 'about' => 'Over mij', 'contact' => 'Contact', 'register' => 'Aanmelden', 'login' => 'Inloggen');  //nieuwe pagina's kunnen hier toegevoegd worden
     echo '<nav>' . PHP_EOL;         
     showNavigateList($variables); 
     echo '</nav>' . PHP_EOL;
@@ -136,6 +140,10 @@ function showContent($page)
         case 'register':
             require_once ('register.php');
             showRegisterContent();
+            break;
+        case 'login':
+            require_once ('login.php');
+            showLoginContent();
             break;
         default:
             echo '<p>Pagina niet gevonden</P>';
