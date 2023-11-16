@@ -8,32 +8,32 @@ function showLoginHeader()
 function showLoginContent()
 {
     // declareVar
-    $variables = array("email"=>"", "password"=>"", "nameErr"=>"","emailErr"=>"", "passwordErr"=>"", "valid" => false); 
+    $data = array("email"=>"", "password"=>"", "nameErr"=>"","emailErr"=>"", "passwordErr"=>"", "valid" => false); 
     
     //varifyRequest
     if ($_SERVER["REQUEST_METHOD"] == "POST") 
     {           
-        $variables['email'] = (getPostVar('email'));
-        $variables['password'] = (getPostVar('password'));
-        $variables = test_input ($variables);
-        $variables = initiateValidationLogin($variables);
+        $data['email'] = (getPostVar('email'));
+        $data['password'] = (getPostVar('password'));
+        $data = test_input ($data);
+        $data = validenLogin($data);
         }
-    if ($variables['valid']) {
+    if ($data['valid']) {
         echo '<input type="hidden" name="page" value="home">'; 
-        /* 
-        startSession ();
-        show in menu: $name uitloggen
-        showResponsPage(home);
-        */
+        
+        $_SESSION["login"] = true;
+        $_SESSION["name"] = $data['name'];  // dit moet ik uit het .txt bestand halen
+        getRequestedPage(home); // Ik weet nog niet hoe dit werkt
+        
     }
     else {
-        showFormLogin($variables);
+        showFormLogin($data);
     }
 }
 
-function test_input($variables) {
+function test_input($data) {
     $results = array();
-    foreach($variables as $key => $value) {
+    foreach($data as $key => $value) {
         $value = trim($value);
         $value = stripslashes($value);
         $value = htmlspecialchars($value);
@@ -42,40 +42,61 @@ function test_input($variables) {
     return $results;
 }
 
-function initiateValidationLogin($variables)
+function validateLogin($data)
 {
-    if (empty($variables['email'])) {
-        $variables['emailErr'] = "E-mailadres is verplicht";
+    if (empty($data['email'])) {
+        $data['emailErr'] = "E-mailadres is verplicht";
     }
         else {
-            //check of de email al in het bestand voorkomt
-            //if (/*weet nog niet wat hier moet*/) {
-              //  $variables['emailErr'] = "Dit e-mailadres is onbekend";}
-            if (!filter_var($variables['email'], FILTER_VALIDATE_EMAIL)) {
-                $variables['emailErr'] = "Dit e-mailadres lijkt niet te kloppen";}
+            if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                $data['emailErr'] = "Dit e-mailadres lijkt niet te kloppen";
+            }
         }               
-    if (empty($variables['password'])) {
-        $variables['passwordErr'] = "Wachtwoord is verplicht";
-    }
-        //else, checken of het emailadres en wachtwoord matchen.
- 
-    if (empty($variables['emailErr']) && empty($variables['passwordErr']) /*&& (match)*/)
-    {
-        $variables['valid'] = true;
-    }
-    return $variables;
+    if (empty($data['password'])) {
+        $data['passwordErr'] = "Wachtwoord is verplicht";
+    }                                                       
+        else {
+            $user_input = $data["email"];
+            $password_input = $data["password"];
+
+            $file = fopen('users.txt', 'r');
+
+            $found = false;
+            while(!feof($file)){
+                $line = fget($file);
+                list($user, $name, $password) = explode ('|', $line);
+                if (trim($user) == $user_input) {
+                    $found = true;
+                    if (trim($password) == $password_input) {
+                    
+                        $data['valid'] = true;
+                        $data['name'] = $name;
+                    }
+                    else {
+                        $data['passwordErr'] = 'Uw wachtwoord klopt niet'; 
+                    }
+                    break;
+                }
+            }
+            if (!$found) {
+                $data['emailErr'] = 'Uw e-mailadres wordt niet herkend';
+            }
+
+            fclose('users.txt');
+        }
+    return $data;
 }    
 
-function showFormLogin ($variables)
+function showFormLogin ($data)
 { //volgens mij moet ik de action aanpassen
     echo '<form action="index.php" method="POST"> 
             <div class="invoervelden">' . PHP_EOL;
     echo '      <label for="email">E-mailadres:</label>
-                    <input class="sw" type="text" id="email" name="email" placeholder="Typ hier uw e-mailadres" value="'; echo $variables['email']; echo '" > 
-                    <span class="error">'; echo $variables['emailErr']; echo '</span><br>
+                    <input class="sw" type="text" id="email" name="email" placeholder="Typ hier uw e-mailadres" value="'; echo $data['email']; echo '" > 
+                    <span class="error">'; echo $data['emailErr']; echo '</span><br>
                 <label for="password">Wachtwoord:</label>
-                    <input class="sw" type="password" id="password" name="password" placeholder="Typ hier uw wachtwoord" value="'; echo $variables['password']; echo '">
-                    <span class="error">'; echo $variables['passwordErr']; echo '</span><br>
+                    <input class="sw" type="password" id="password" name="password" placeholder="Typ hier uw wachtwoord" value="'; echo $data['password']; echo '">
+                    <span class="error">'; echo $data['passwordErr']; echo '</span><br>
                 <br>   
             </div>
                 <input class="knop" type="submit" Value="Inloggen">

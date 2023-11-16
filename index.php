@@ -1,7 +1,8 @@
 <?php
-
+session_start();
 $page = getRequestedPage ();
-showResponsePage($page);
+$data = processRequest ($page);
+showResponsePage($data);
 
 function getRequestedPage () 
 {
@@ -16,6 +17,42 @@ function getRequestedPage ()
     }
     return $requested_page;
 }
+
+function processRequest($page) 
+{
+    switch ($page) 
+    {
+        case "contact":
+            require_once ('validation');
+            $data = validateContact();
+            if ($data['valid']){
+                $page = 'thanks';
+            }
+            break;
+        case "register":
+            require_once ('validation');
+            $data = validateRegister();
+            if ($data['valid']){
+                storeUser($data['email'], $data['name'], $data['password']);
+                $page = 'login';
+            }
+            break;  
+        case "login":
+            require_once ('validation');
+            $data = validateLogin();
+            if ($data['valid']){
+                $_SESSION["login"] = true;
+                $page = 'home';
+            }
+            break;
+        case "logout":
+            $_SESSION["login"] = false;
+            $page = 'home';
+            break;
+        }
+    $data['page']=$page;
+    return $data;
+    }
 
 function showResponsePage($page)
 {
@@ -43,35 +80,30 @@ function getUrlVar($key, $default=' ')
 function showHeadSection ()
 {
     echo '<head>' . PHP_EOL;             
-    showCssFile();           
+    echo '<link rel="stylesheet" href="CSS/stylesheet.css">' . PHP_EOL; //showCssFile          
     echo '</head>' . PHP_EOL;   
-}
-
-function showCssFile ()
-{
-    echo '<link rel="stylesheet" href="CSS/stylesheet.css">' . PHP_EOL;
 }
 
 function showBodySection($page)
 {
     echo '  <body>' . PHP_EOL;         //openBody    
-    showHeader($page);           
-    showMenu();             
-    showContent($page);          
+    showHeader($data);           
+    showMenu($data);             
+    showContent($data);          
     showFooter();           
     echo '  </body.' . PHP_EOL;         //closeBody        
 }
 
-function showHeader($page)
+function showHeader($data)
 {
     echo '<header>' . PHP_EOL;          //openHeader
-    showHeaderContent($page);            
+    showHeaderContent($data);            
     echo '</header>' . PHP_EOL;         //closeHeader
 }
 
-function showHeaderContent ($page)
+function showHeaderContent ($data)
 {
-    switch ($page)
+    switch ($data['page'])
     {
         case 'home':
             require_once ('home.php');  
@@ -98,18 +130,23 @@ function showHeaderContent ($page)
     }
 }
 
-function showMenu()
+function showMenu($data)
 {  
-    $variables['menu']= array('home' => 'Startpagina', 'about' => 'Over mij', 'contact' => 'Contact', 'register' => 'Aanmelden', 'login' => 'Inloggen');  //nieuwe pagina's kunnen hier toegevoegd worden
-    echo '<nav>' . PHP_EOL;         
-    showNavigateList($variables); 
+    $items['menu']= array('home' => 'Startpagina', 'about' => 'Over mij', 'contact' => 'Contact');  //nieuwe pagina's kunnen hier toegevoegd worden
+    if ($_SESSION["login"]) {
+        $items['menu']['logout'] = $_SESSION["name"].' uitloggen';
+    } else {
+        $items['menu']['register'] = 'Aanmelden'; $data['menu']['login'] = 'Inloggen'; 
+    }
+    echo '<nav>' . PHP_EOL;                
+    showNavigateList ($data);
     echo '</nav>' . PHP_EOL;
 }
 
-function showNavigateList($variables)
+function showNavigateList($variablesList)
 {
     echo    '<ul class="menu">';
-    foreach ($variables['menu'] as $link => $label) 
+    foreach ($variablesList['menu'] as $link => $label)
     {
         showNavigateItem($link, $label);
     }
@@ -121,9 +158,9 @@ function showNavigateItem($link, $label)
         echo '<li><a href="index.php?page=' . $link . '">' . $label . '</a></li>';
 }     
    
-function showContent($page)
+function showContent($data)
 {
-    switch ($page)
+    switch ($data['page'])
     {
         case 'home':
             require_once('home.php');           
@@ -135,15 +172,15 @@ function showContent($page)
             break;
         case 'contact':
             require_once('contact.php');
-            showContactContent();                   
+            showContactForm();                   
             break;
         case 'register':
             require_once ('register.php');
-            showRegisterContent();
+            showRegisterForm();
             break;
         case 'login':
             require_once ('login.php');
-            showLoginContent();
+            showLoginForm();
             break;
         default:
             echo '<p>Pagina niet gevonden</P>';

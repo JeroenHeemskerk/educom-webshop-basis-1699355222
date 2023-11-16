@@ -5,40 +5,40 @@ function showContactHeader()
     echo '<h1>Contact</h1>' . PHP_EOL;
 }
 
-function showContactContent ()
+function showContactContent ()  //verplaast validation naar file
 {
     // declareVar
-    $variables = array("salut"=>"", "name"=>"", "com"=>"", "email"=>"", "phone"=>"", "street"=>"", "strnr"=>"", "zpcd"=>"", "resid"=>"", "message"=>"", "salutErr"=>"", "nameErr"=>"", "comErr"=>"", "emailErr"=>"", "phoneErr"=>"", "streetErr"=>"", "strnrErr"=>"", "zpcdErr"=>"", "residErr"=>"", "messageErr"=>"", "valid" => false); 
+    $data = array("salut"=>"", "name"=>"", "com"=>"", "email"=>"", "phone"=>"", "street"=>"", "strnr"=>"", "zpcd"=>"", "resid"=>"", "message"=>"", "salutErr"=>"", "nameErr"=>"", "comErr"=>"", "emailErr"=>"", "phoneErr"=>"", "streetErr"=>"", "strnrErr"=>"", "zpcdErr"=>"", "residErr"=>"", "messageErr"=>"", "valid" => false); 
     
     //varifyRequest
     if ($_SERVER["REQUEST_METHOD"] == "POST") 
     {
-        $variables['salut'] = (getPostVar('salut'));            
-        $variables['name'] = (getPostVar('name'));
-        if (!preg_match("/^[a-zA-Z-' ]*$/",$variables['name'])) {
-            $variables['nameErr'] = "U kunt hier alleen letters invullen";}        
-        $variables['com'] = (getPostVar('com'));
-        $variables['email'] = (getPostVar('email'));
-        $variables['phone'] = (getPostVar('phone'));
-        $variables['street'] = (getPostVar('street'));
-        $variables['strnr'] = (getPostVar('strnr'));
-        $variables['zpcd'] = (getPostVar('zpcd'));
-        $variables['resid'] = (getPostVar('resid'));
-        $variables['message'] = (getPostVar('message'));
-        $variables = test_input ($variables);
-        $variables = initiateValidationContact($variables);
+        $data['salut'] = (getPostVar('salut'));            
+        $data['name'] = (getPostVar('name'));
+        if (!preg_match("/^[a-zA-Z-' ]*$/",$data['name'])) {
+            $data['nameErr'] = "U kunt hier alleen letters invullen";}        
+        $data['com'] = (getPostVar('com'));
+        $data['email'] = (getPostVar('email'));
+        $data['phone'] = (getPostVar('phone'));
+        $data['street'] = (getPostVar('street'));
+        $data['strnr'] = (getPostVar('strnr'));
+        $data['zpcd'] = (getPostVar('zpcd'));
+        $data['resid'] = (getPostVar('resid'));
+        $data['message'] = (getPostVar('message'));
+        $data = test_input ($data);
+        $data = validateContact($data);
     }
-    if ($variables['valid']) {
-        showThanksNote($variables);
+    if ($data['valid']) {
+        showThanksNote($data);
     }
     else {
-        showFormContact($variables);
+        showFormContact($data);
     }
 }
 
-function test_input($variables) {
+function test_input($data) {
     $results = array();
-    foreach($variables as $key => $value) {
+    foreach($data as $key => $value) {
         $value = trim($value);
         $value = stripslashes($value);
         $value = htmlspecialchars($value);
@@ -47,110 +47,110 @@ function test_input($variables) {
     return $results;
 }
 
-function initiateValidationContact($variables)
+function validateContact($data)
 {
-    if (empty($variables["salut"])) {                       
-        $variables['salutErr'] = "Aanhef is verplicht";
+    if (empty($data["salut"])) {                       
+        $data['salutErr'] = "Aanhef is verplicht";
     } 
-    if (empty($variables['name'])) {
-        $variables['nameErr'] = "Naam is verplicht";
+    if (empty($data['name'])) {
+        $data['nameErr'] = "Naam is verplicht";
     } 
-    if (empty($variables['message'])) {
-        $variables['messageErr'] = "Vraag is verplicht";
+    if (empty($data['message'])) {
+        $data['messageErr'] = "Vraag is verplicht";
     } 
-    if (empty($variables['com'])) {
-        $variables['comErr'] = "Communicatievoorkeur is verplicht"; 
+    if (empty($data['com'])) {
+        $data['comErr'] = "Communicatievoorkeur is verplicht"; 
     } 
-    if ($variables['com'] =="E-mail") {
-        if (empty($variables['email'])) {
-            $variables['emailErr'] = "E-mailadres is verplicht";
+    if ($data['com'] =="E-mail") {
+        if (empty($data['email'])) {
+            $data['emailErr'] = "E-mailadres is verplicht";
         }
         else {
-            if (!filter_var($variables['email'], FILTER_VALIDATE_EMAIL)) {
-                $variables['emailErr'] = "Dit e-mailadres lijkt niet te kloppen";}
+            if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+                $data['emailErr'] = "Dit e-mailadres lijkt niet te kloppen";}
         }        
     }    
-    else if ($variables['com'] =="Phone") {                                     
-        if (empty($variables['phone'])) {
-            $variables['phoneErr'] = "Telefoonnummer is verplicht";
+    else if ($data['com'] =="Phone") {                                     
+        if (empty($data['phone'])) {
+            $data['phoneErr'] = "Telefoonnummer is verplicht";
         }
         else {
-            if (!preg_match('/^[0-9 -+]+$/', $variables['phone'])) { 
-                $variables['phoneErr'] = "Dit lijkt geen goed telefoonnummer";} 
+            if (!preg_match('/^[0-9 -+]+$/', $data['phone'])) { 
+                $data['phoneErr'] = "Dit lijkt geen goed telefoonnummer";} 
             }        
     }       
     $adress = false;
-    $adress = ($variables['com'] =='Mail') || !empty($variables['street']) || !empty($variables['strnr']) || !empty($variables['zpcd']) || !empty($variables['resid']);
+    $adress = ($data['com'] =='Mail') || !empty($data['street']) || !empty($data['strnr']) || !empty($data['zpcd']) || !empty($data['resid']);
     if ($adress) {                             
-        if (empty($variables['street'])) {                  
-            $variables['streetErr'] = "Staatnaam is verplicht";          
+        if (empty($data['street'])) {                  
+            $data['streetErr'] = "Staatnaam is verplicht";          
         } 
-        if (empty($variables['strnr'])) {
-            $variables['strnrErr'] = "Huisnummer is verplicht";
+        if (empty($data['strnr'])) {
+            $data['strnrErr'] = "Huisnummer is verplicht";
         }
-        if (empty($variables['zpcd'])) {
-            $variables['zpcdErr'] = "Postcode is verplicht";
+        if (empty($data['zpcd'])) {
+            $data['zpcdErr'] = "Postcode is verplicht";
         } 
-        if (empty($variables['resid'])) {
-            $variables['residErr'] = "Woonplaats is verplicht";
+        if (empty($data['resid'])) {
+            $data['residErr'] = "Woonplaats is verplicht";
         }
     }
-    if (empty($variables['saludErr']) && empty($variables['nameErr']) && empty($variables['comErr']) && empty($variables['emailErr']) && empty($variables['phoneErr']) && empty($variables['streetErr']) && empty($variables['strnrErr']) && empty($variables['zpcdErr']) && empty($variables['residErr']) && empty($variables['messageErr']))
+    if (empty($data['saludErr']) && empty($data['nameErr']) && empty($data['comErr']) && empty($data['emailErr']) && empty($data['phoneErr']) && empty($data['streetErr']) && empty($data['strnrErr']) && empty($data['zpcdErr']) && empty($data['residErr']) && empty($data['messageErr']))
     {
-        $variables['valid'] = true;
+        $data['valid'] = true;
     }
-    return $variables;
+    return $data;
 }    
 
-function showFormContact ($variables)
+function showContactForm ($data)
 {
     echo '<form action="index.php" method="POST">
             <div class="invoervelden">' . PHP_EOL;
     echo '      <label for="salut">Aanhef:</label>
                     <select class="sel" id="salut" name="salut">
                         <option value=""></option>  
-                        <option value="man"'; if ($variables['salut'] == "man") { echo 'selected="selected"'; } echo '>Dhr.</option>
-                        <option value="woman"'; if ($variables['salut'] == "woman") { echo 'selected="selected"'; } echo '>Mvr.</option>
-                        <option value="different"'; if ($variables['salut'] == "different") { echo 'selected="selected"'; } echo '>Anders</option>
+                        <option value="man"'; if ($data['salut'] == "man") { echo 'selected="selected"'; } echo '>Dhr.</option>
+                        <option value="woman"'; if ($data['salut'] == "woman") { echo 'selected="selected"'; } echo '>Mvr.</option>
+                        <option value="different"'; if ($data['salut'] == "different") { echo 'selected="selected"'; } echo '>Anders</option>
                     </select>
-                        <span class="error">'; echo $variables['salutErr']; echo '</span><br> 
+                        <span class="error">'; echo $data['salutErr']; echo '</span><br> 
                 <label for="fname">Naam:</label>
-                    <input class="sw" type="text" id="fname" name="name" placeholder="Typ hier uw naam" value="'; echo $variables['name']; echo '">
-                    <span class="error">'; echo $variables['nameErr']; echo '</span><br>                
+                    <input class="sw" type="text" id="fname" name="name" placeholder="Typ hier uw naam" value="'; echo $data['name']; echo '">
+                    <span class="error">'; echo $data['nameErr']; echo '</span><br>                
                 <label for="email">E-mailadres:</label>
-                    <input class="sw" type="text" id="email" name="email" placeholder="Typ hier uw e-mailadres" value="'; echo $variables['email']; echo '" > 
-                    <span class="error">'; echo $variables['emailErr']; echo '</span><br>
+                    <input class="sw" type="text" id="email" name="email" placeholder="Typ hier uw e-mailadres" value="'; echo $data['email']; echo '" > 
+                    <span class="error">'; echo $data['emailErr']; echo '</span><br>
                 <label for="phone">Telefoonnummer:</label>
-                    <input class="sw" type="text" id="phone" name="phone" placeholder="Typ hier uw telefoonnummer" value="'; echo $variables['phone']; echo '">
-                    <span class="error">'; echo $variables['phoneErr']; echo '</span><br>
+                    <input class="sw" type="text" id="phone" name="phone" placeholder="Typ hier uw telefoonnummer" value="'; echo $data['phone']; echo '">
+                    <span class="error">'; echo $data['phoneErr']; echo '</span><br>
                 <label for="street">Straatnaam</label>
-                    <input class="sw" type="text" id="street" name="street" placeholder="Typ hier uw straat" value="'; echo $variables['street']; echo '"> 
-                    <span class="error">'; echo $variables['streetErr'];echo '</span><br>
+                    <input class="sw" type="text" id="street" name="street" placeholder="Typ hier uw straat" value="'; echo $data['street']; echo '"> 
+                    <span class="error">'; echo $data['streetErr'];echo '</span><br>
                 <label for="strnr">Huisnummer</label>
-                    <input class="sw" type="text" id="strnr" name="strnr" placeholder="Typ hier uw huisnummer" value="'; echo $variables['strnr']; echo '">
-                    <span class="error">'; echo $variables['strnrErr']; echo '</span><br>
+                    <input class="sw" type="text" id="strnr" name="strnr" placeholder="Typ hier uw huisnummer" value="'; echo $data['strnr']; echo '">
+                    <span class="error">'; echo $data['strnrErr']; echo '</span><br>
                 <label for="zpcd">Postcode</label>
-                    <input class="sw" type="text" id="zpcd" name="zpcd" placeholder="Typ hier uw postcode als 1234 AB" value="'; echo $variables['zpcd']; echo '">
-                    <span class="error">'; echo $variables['zpcdErr']; echo '</span><br>
+                    <input class="sw" type="text" id="zpcd" name="zpcd" placeholder="Typ hier uw postcode als 1234 AB" value="'; echo $data['zpcd']; echo '">
+                    <span class="error">'; echo $data['zpcdErr']; echo '</span><br>
                 <label for="resid">Woonplaats</label>
-                    <input class="sw" type="text" id="resid" name="resid" placeholder="Typ hier uw woonplaats" value="'; echo $variables['resid']; echo '">
-                    <span class="error">'; echo $variables['residErr']; echo '</span><br>
+                    <input class="sw" type="text" id="resid" name="resid" placeholder="Typ hier uw woonplaats" value="'; echo $data['resid']; echo '">
+                    <span class="error">'; echo $data['residErr']; echo '</span><br>
                 <br>   
             </div>
             <div>
-            Kies uw communicatievoorkeur:<span class="error">'; echo $variables['comErr']; echo '</span><br>
-                <input type="radio" id="com_email" name="com" value="E-mail"'; if ($variables['com'] =="E-mail") echo 'checked = "checked"'; echo '>
+            Kies uw communicatievoorkeur:<span class="error">'; echo $data['comErr']; echo '</span><br>
+                <input type="radio" id="com_email" name="com" value="E-mail"'; if ($data['com'] =="E-mail") echo 'checked = "checked"'; echo '>
                     <label for="com_email">E-mail</label><br>
-                <input type="radio" id="phone" name="com" value="Phone"'; if ($variables['com'] =="Phone") echo 'checked = "checked"'; echo '>
+                <input type="radio" id="phone" name="com" value="Phone"'; if ($data['com'] =="Phone") echo 'checked = "checked"'; echo '>
                     <label for="phone">Telefoon</label><br>
-                <input type="radio" id="mail" name="com" value="Mail"'; if ($variables['com'] =="Mail") echo 'checked = "checked"'; echo '>
+                <input type="radio" id="mail" name="com" value="Mail"'; if ($data['com'] =="Mail") echo 'checked = "checked"'; echo '>
                     <label for="mail">Post</label><br>
                 <br>
             </div>
             <div class="invoervelden">    
             Waarover wilt u contact opnemen?<br>
-                <textarea class="sw" name="message" rows="4" cols="53" placeholder="Typ hier uw vraag">'; echo $variables['message']; echo '</textarea>
-                <span class="error">'; echo $variables['messageErr']; echo '</span><br>
+                <textarea class="sw" name="message" rows="4" cols="53" placeholder="Typ hier uw vraag">'; echo $data['message']; echo '</textarea>
+                <span class="error">'; echo $data['messageErr']; echo '</span><br>
                 <br>
                 <input class="knop" type="submit" Value="Verstuur">
                 <input type="hidden" name="page" value="contact">       
@@ -159,20 +159,20 @@ function showFormContact ($variables)
 }
 
 
-function showThanksNote ($variables) 
+function showThanksNote ($data) 
 { 
     echo '<p> Uw reactie is verzonden. Bedankt voor het invullen!</p>';
     echo '<p> U heeft het volgende ingevuld:' . '<br><br>';
-    echo 'Aanhef: ' . $variables['salut'] . '<br>';
-    echo 'Naam: ' . $variables['name'] . '<br>';
-    echo 'E-mailadres: ' . $variables['email'] . '<br>';
-    echo 'Telefoonnummer: ' . $variables['phone'] . '<br>';
-    echo 'Straatnaam: ' . $variables['street'] . '<br>';
-    echo 'Huisnummer: ' . $variables['strnr'] . '<br>';
-    echo 'Postcode: ' . $variables['zpcd'] . '<br>';
-    echo 'Woonplaats: ' . $variables['resid'] . '<br>';
-    echo 'Communicatievoorkeur: ' . $variables['com'] . '<br>';
-    echo 'Vraag: ' . $variables['message'] . '<br></p>';
+    echo 'Aanhef: ' . $data['salut'] . '<br>';
+    echo 'Naam: ' . $data['name'] . '<br>';
+    echo 'E-mailadres: ' . $data['email'] . '<br>';
+    echo 'Telefoonnummer: ' . $data['phone'] . '<br>';
+    echo 'Straatnaam: ' . $data['street'] . '<br>';
+    echo 'Huisnummer: ' . $data['strnr'] . '<br>';
+    echo 'Postcode: ' . $data['zpcd'] . '<br>';
+    echo 'Woonplaats: ' . $data['resid'] . '<br>';
+    echo 'Communicatievoorkeur: ' . $data['com'] . '<br>';
+    echo 'Vraag: ' . $data['message'] . '<br></p>';
 }
 
 ?>
