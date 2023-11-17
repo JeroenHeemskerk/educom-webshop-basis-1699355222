@@ -219,7 +219,7 @@ function validateLoginData($data)
         $data['passwordErr'] = "Wachtwoord is verplicht";
     }                                                       
         else {
-            checkUserLogin (data$);
+            checkUserLogin ($data);
         }
     return $data;
 }
