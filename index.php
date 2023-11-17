@@ -24,7 +24,6 @@ function processRequest($page)
     {
         case "contact":
             require_once ('validation.php');
-            validateContact();
             $data = validateContact();
             if ($data['valid']){                                                //geeft een error
                 $page = 'thanks';
@@ -52,7 +51,7 @@ function processRequest($page)
             $page = 'home';
             break;
         }
-    $data['login'] = $_SESSION["login"];                                        //Geeft aan dat het ongeïndentificeerd is, maar dat heb ik toch in de case gedaan?
+    $data['login'] = isset($_SESSION["login"]) && $_SESSION['login'];                                        //Geeft aan dat het ongeïndentificeerd is, maar dat heb ik toch in de case gedaan?
     $data['page']= $page;
     return $data;
     }

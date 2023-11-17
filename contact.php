@@ -42,11 +42,11 @@ function showContactForm ($data)
             </div>
             <div>
             Kies uw communicatievoorkeur:<span class="error">' . $data['comErr'] . '</span><br>
-                <input type="radio" id="com_email" name="com" value="E-mail"'; if ($data['com'] =="E-mail"); echo 'checked = "checked"' . '>
+                <input type="radio" id="com_email" name="com" value="E-mail"' . ($data['com'] =="E-mail" ? 'checked = "checked"' : '') . '>
                     <label for="com_email">E-mail</label><br>
-                <input type="radio" id="phone" name="com" value="Phone"'; if ($data['com'] =="Phone"); echo 'checked = "checked"' . '>
+                <input type="radio" id="phone" name="com" value="Phone"' . ($data['com'] =="Phone" ? 'checked = "checked"' : ' ') . '>
                     <label for="phone">Telefoon</label><br>
-                <input type="radio" id="mail" name="com" value="Mail"'; if ($data['com'] =="Mail"); echo 'checked = "checked"' . '>
+                <input type="radio" id="mail" name="com" value="Mail"' . ($data['com'] =="Mail" ? 'checked = "checked"' : ' ') . '>
                     <label for="mail">Post</label><br>
                 <br>
             </div>

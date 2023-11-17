@@ -23,8 +23,9 @@ function validateContact()
         $data['message'] = (getPostVar('message'));
         $data = test_contact_input ($data);
         $data = validateContactData($data);
-        return $data;
+        
     }
+    return $data;   
 }
 
 function test_contact_input($data) {
@@ -129,9 +130,8 @@ function validateRegister()
         $data['passwordrep'] = (getPostVar('passwordrep'));
         $data = test_register_input ($data);
         $data = validateRegisterData($data);
-        return $data;
     }
-    
+    return $data;
 }
 
 function test_register_input($data) {
@@ -187,10 +187,9 @@ function validateLogin()
         $data['email'] = (getPostVar('email'));
         $data['password'] = (getPostVar('password'));
         $data = test_login_input ($data);
-        $data = validateLoginData($data);
-        return $data;
+        $data = validateLoginData($data);    
     }
-
+    return $data;
 }
 
 function test_login_input($data) {
@@ -217,9 +216,10 @@ function validateLoginData($data)
     if (empty($data['password'])) {
         $data['passwordErr'] = "Wachtwoord is verplicht";
     }                                                       
-        else {
-            checkUserLogin ($data);
-        }
+    else {
+        require_once ('user_service.php');
+        checkUserLogin($data);                                                      //dit lijkt niet te gebeuren
+    }
     return $data;
 }
 ?>

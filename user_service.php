@@ -30,7 +30,7 @@ function checkUserLogin($data)
 
             $found = false;
             while(!feof($file)){
-                $line = fget($file);
+                $line = fgets($file);
                 list($email, $name, $password) = explode ('|', $line);
                 if (trim($email) == $email_input) {
                     $found = true;
@@ -48,7 +48,6 @@ function checkUserLogin($data)
             if (!$found) {
                 $data['emailErr'] = 'Uw e-mailadres wordt niet herkend';
             }
-
-            fclose('users.txt');
+            return $data;
 }
 ?>
