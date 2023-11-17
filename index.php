@@ -26,14 +26,14 @@ function processRequest($page)
             require_once ('validation.php');
             validateContact();
             $data = validateContact();
-            if ($data['valid']){
+            if ($data['valid']){                                                //geeft een error
                 $page = 'thanks';
             }
             break;
         case "register":
             require_once ('validation.php');
             $data = validateRegister();
-            if ($data['valid']){
+            if ($data['valid']){                                                //geeft een error
                 require_once ('user_service.php');
                 storeUser($data['email'], $data['name'], $data['password']);
                 $page = 'login';
@@ -42,7 +42,7 @@ function processRequest($page)
         case "login":
             require_once ('validation.php');
             $data = validateLogin();
-            if ($data['valid']){
+            if ($data['valid']){                                                //geeft een error
                 $_SESSION["login"] = true;
                 $page = 'home';
             }
@@ -52,7 +52,7 @@ function processRequest($page)
             $page = 'home';
             break;
         }
-    $data['login'] = $_SESSION["login"];                   //Geeft aan dat het ongeïndentificeerd is, maar dat heb ik toch in de case gedaan?
+    $data['login'] = $_SESSION["login"];                                        //Geeft aan dat het ongeïndentificeerd is, maar dat heb ik toch in de case gedaan?
     $data['page']= $page;
     return $data;
     }
@@ -129,7 +129,7 @@ function showHeaderContent ($data)
             showLoginHeader();
             break;
         case 'thanks':
-            require_oncde ('thanks.php');
+            require_once ('thanks.php');
             showThanksHeader ();
             break;
         default:
@@ -189,8 +189,8 @@ function showContent($data)
             require_once ('login.php');         
             showLoginForm($data);
             break;
-        case 'thanks':                          //Werkt nog niet
-            require_oncde ('thanks.php');
+        case 'thanks':                                                      
+            require_once ('thanks.php');
             showThanksContent ($data);
             break;
         default:

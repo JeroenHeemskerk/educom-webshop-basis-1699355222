@@ -61,7 +61,7 @@ function validateContactData($data)
                 $data['emailErr'] = "Dit e-mailadres lijkt niet te kloppen";}
         }        
     }    
-    else if ($data['com'] =="Phone") {                                     
+    if ($data['com'] =="Phone") {                                     
         if (empty($data['phone'])) {
             $data['phoneErr'] = "Telefoonnummer is verplicht";
         }
@@ -70,12 +70,11 @@ function validateContactData($data)
                 $data['phoneErr'] = "Dit lijkt geen goed telefoonnummer";} 
             }        
     }       
-    $adress = false;
-    $adress = ($data['com'] =='Mail');
+    
     $adressCom = false;
     $adressCom = !empty($data['street']) && !empty($data['strnr']) && !empty($data['zpcd']) && !empty($data['resid']);                             
     if (empty($data['street'])) { 
-        if ($adress) {                 
+        if ($data['com'] =='Mail') {                 
             $data['streetErr'] = "Staatnaam is verplicht"; 
         }
         else if ($adressCom = false) {
@@ -83,7 +82,7 @@ function validateContactData($data)
         }
     }
     if (empty($data['strnr'])) {
-        if ($adress) {
+        if ($data['com'] =='Mail') {
             $data['strnrErr'] = "Huisnummer is verplicht";
         }
         else if ($adressCom = false) {
@@ -91,7 +90,7 @@ function validateContactData($data)
         }
     }
     if (empty($data['zpcd'])) {
-        if ($adress) {
+        if ($data['com'] =='Mail') {
             $data['zpcdErr'] = "Postcode is verplicht";
         }
         else if ($adressCom = false) {
@@ -99,7 +98,7 @@ function validateContactData($data)
         }
     } 
     if (empty($data['resid'])) {
-        if ($adress) {
+        if ($data['com'] =='Mail') {
             $data['residErr'] = "Woonplaats is verplicht";
         }
         else if ($adressCom = false) {
