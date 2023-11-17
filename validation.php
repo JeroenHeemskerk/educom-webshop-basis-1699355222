@@ -109,18 +109,8 @@ function validateRegister()
         $data['passwordrep'] = (getPostVar('passwordrep'));
         $data = test_register_input ($data);
         $data = validateRegisterData($data);
-        }
-    if ($data['valid']) {
-        //echo '<input type="hidden" name="page" value="login">'; 
-        
-        //addInput();
-        require_once('index.php');
-        getRequestedPage('login');
-        
     }
-    else {
-        showFormRegister($data);
-    }
+    
 }
 
 function test_register_input($data) {
@@ -148,6 +138,7 @@ function validateRegisterData($data)
                 list($user, $name, $password) = explode ('|', $line);
                 if (trim($user) == $user_input) {
                     $data['emailErr'] = 'Dit e-mailadres is al in gebruik'; 
+                    fclose('users.txt');
                     }
             }
             if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
@@ -182,7 +173,7 @@ function validateLogin()
         $data['password'] = (getPostVar('password'));
         $data = test_login_input ($data);
         $data = validateLoginData($data);
-        }
+    }
 }
 
 function test_login_input($data) {

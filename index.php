@@ -23,14 +23,14 @@ function processRequest($page)
     switch ($page) 
     {
         case "contact":
-            require_once ('validation');
+            require_once ('validation.php');
             $data = validateContact();
             if ($data['valid']){
                 $page = 'thanks';
             }
             break;
         case "register":
-            require_once ('validation');
+            require_once ('validation.php');
             $data = validateRegister();
             if ($data['valid']){
                 storeUser($data['email'], $data['name'], $data['password']);
@@ -38,7 +38,7 @@ function processRequest($page)
             }
             break;  
         case "login":
-            require_once ('validation');
+            require_once ('validation.php');
             $data = validateLogin();
             if ($data['valid']){
                 $_SESSION["login"] = true;
@@ -50,15 +50,16 @@ function processRequest($page)
             $page = 'home';
             break;
         }
+    $data['login'] = $_SESSION["login"];                   //Geeft aan dat het ongeïndentificeerd is, maar dat heb ik toch in de case gedaan?
     $data['page']=$page;
     return $data;
     }
 
-function showResponsePage($page)
+function showResponsePage($data)
 {
     echo '<!doctype html><html>' . PHP_EOL;                //beginDocument
     showHeadSection();              
-    showBodySection($page);
+    showBodySection($data);
     echo '</html>' . PHP_EOL;                               //endDocument
 }
 
@@ -84,7 +85,7 @@ function showHeadSection ()
     echo '</head>' . PHP_EOL;   
 }
 
-function showBodySection($page)
+function showBodySection($data)
 {
     echo '  <body>' . PHP_EOL;         //openBody    
     showHeader($data);           
@@ -125,6 +126,10 @@ function showHeaderContent ($data)
             require_once ('login.php');
             showLoginHeader();
             break;
+        case 'thanks':
+            require_oncde ('thanks.php');
+            showThanksHeader ();
+            break;
         default:
             echo '<p>Pagina niet gevonden</P>';
     }
@@ -132,21 +137,21 @@ function showHeaderContent ($data)
 
 function showMenu($data)
 {  
-    $items['menu']= array('home' => 'Startpagina', 'about' => 'Over mij', 'contact' => 'Contact');  //nieuwe pagina's kunnen hier toegevoegd worden
-    if ($_SESSION["login"]) {
+    $data['menu']= array('home' => 'Startpagina', 'about' => 'Over mij', 'contact' => 'Contact');  //nieuwe pagina's kunnen hier toegevoegd worden
+    if ($data["login"]) {                                                                          
         $items['menu']['logout'] = $_SESSION["name"].' uitloggen';
     } else {
-        $items['menu']['register'] = 'Aanmelden'; $data['menu']['login'] = 'Inloggen'; 
+        $data['menu']['register'] = 'Aanmelden' ; $data['menu']['login'] = 'Inloggen'; 
     }
     echo '<nav>' . PHP_EOL;                
     showNavigateList ($data);
     echo '</nav>' . PHP_EOL;
 }
 
-function showNavigateList($variablesList)
+function showNavigateList($data)
 {
     echo    '<ul class="menu">';
-    foreach ($variablesList['menu'] as $link => $label)
+    foreach ($data['menu'] as $link => $label)
     {
         showNavigateItem($link, $label);
     }
@@ -172,15 +177,19 @@ function showContent($data)
             break;
         case 'contact':
             require_once('contact.php');
-            showContactForm();                   
+            showContactForm();                  //Werkt nog niet          
             break;
         case 'register':
-            require_once ('register.php');
+            require_once ('register.php');      //Werkt nog niet
             showRegisterForm();
             break;
         case 'login':
-            require_once ('login.php');
+            require_once ('login.php');         //Werkt nog niet
             showLoginForm();
+            break;
+        case 'thanks':                          //Werking nog niet vast te stellen
+            require_oncde ('thanks.php');
+            showThanksContent ();
             break;
         default:
             echo '<p>Pagina niet gevonden</P>';
