@@ -3,7 +3,7 @@
 // CONTACT
 function validateContact()
 {
-    // declareVar
+    // declareVariables
     $data = array("salut"=>"", "name"=>"", "com"=>"", "email"=>"", "phone"=>"", "street"=>"", "strnr"=>"", "zpcd"=>"", "resid"=>"", "message"=>"", "salutErr"=>"", "nameErr"=>"", "comErr"=>"", "emailErr"=>"", "phoneErr"=>"", "streetErr"=>"", "strnrErr"=>"", "zpcdErr"=>"", "residErr"=>"", "messageErr"=>"", "valid" => false); 
     
     //varifyRequest
@@ -23,6 +23,7 @@ function validateContact()
         $data['message'] = (getPostVar('message'));
         $data = test_contact_input ($data);
         $data = validateContactData($data);
+        return $data;
     }
 }
 
@@ -95,7 +96,7 @@ function validateContactData($data)
 //REGISTER
 function validateRegister()
 {
-    // declareVar
+    // declareVariables
     $data = array("name"=>"","email"=>"", "password"=>"", "passwordrep"=>"", "nameErr"=>"","emailErr"=>"", "passwordErr"=>"", "passwordrepErr"=>"", "valid" => false); 
     
     //varifyRequest
@@ -109,6 +110,7 @@ function validateRegister()
         $data['passwordrep'] = (getPostVar('passwordrep'));
         $data = test_register_input ($data);
         $data = validateRegisterData($data);
+        return $data;
     }
     
 }
@@ -163,7 +165,7 @@ function validateRegisterData($data)
 //LOGIN
 function validateLogin()
 {
-    // declareVar
+    // declareVariables
     $data = array("email"=>"", "password"=>"", "nameErr"=>"","emailErr"=>"", "passwordErr"=>"", "valid" => false); 
     
     //varifyRequest
@@ -173,7 +175,9 @@ function validateLogin()
         $data['password'] = (getPostVar('password'));
         $data = test_login_input ($data);
         $data = validateLoginData($data);
+        return $data;
     }
+
 }
 
 function test_login_input($data) {

@@ -19,6 +19,7 @@ function showThanksContent ($data)
     echo 'Woonplaats: ' . $data['resid'] . '<br>';
     echo 'Communicatievoorkeur: ' . $data['com'] . '<br>';
     echo 'Vraag: ' . $data['message'] . '<br></p>';
+    return $data;
 }
 
 ?>

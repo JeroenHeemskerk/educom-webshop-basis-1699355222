@@ -5,103 +5,6 @@ function showContactHeader()
     echo '<h1>Contact</h1>' . PHP_EOL;
 }
 
-function showContactContent ()  //verplaast validation naar file
-{
-    // declareVar
-    $data = array("salut"=>"", "name"=>"", "com"=>"", "email"=>"", "phone"=>"", "street"=>"", "strnr"=>"", "zpcd"=>"", "resid"=>"", "message"=>"", "salutErr"=>"", "nameErr"=>"", "comErr"=>"", "emailErr"=>"", "phoneErr"=>"", "streetErr"=>"", "strnrErr"=>"", "zpcdErr"=>"", "residErr"=>"", "messageErr"=>"", "valid" => false); 
-    
-    //varifyRequest
-    if ($_SERVER["REQUEST_METHOD"] == "POST") 
-    {
-        $data['salut'] = (getPostVar('salut'));            
-        $data['name'] = (getPostVar('name'));
-        if (!preg_match("/^[a-zA-Z-' ]*$/",$data['name'])) {
-            $data['nameErr'] = "U kunt hier alleen letters invullen";}        
-        $data['com'] = (getPostVar('com'));
-        $data['email'] = (getPostVar('email'));
-        $data['phone'] = (getPostVar('phone'));
-        $data['street'] = (getPostVar('street'));
-        $data['strnr'] = (getPostVar('strnr'));
-        $data['zpcd'] = (getPostVar('zpcd'));
-        $data['resid'] = (getPostVar('resid'));
-        $data['message'] = (getPostVar('message'));
-        $data = test_input ($data);
-        $data = validateContact($data);
-    }
-    if ($data['valid']) {
-        showThanksNote($data);
-    }
-    else {
-        showFormContact($data);
-    }
-}
-
-function test_input($data) {
-    $results = array();
-    foreach($data as $key => $value) {
-        $value = trim($value);
-        $value = stripslashes($value);
-        $value = htmlspecialchars($value);
-        $results[$key] = $value;
-    }
-    return $results;
-}
-
-function validateContact($data)
-{
-    if (empty($data["salut"])) {                       
-        $data['salutErr'] = "Aanhef is verplicht";
-    } 
-    if (empty($data['name'])) {
-        $data['nameErr'] = "Naam is verplicht";
-    } 
-    if (empty($data['message'])) {
-        $data['messageErr'] = "Vraag is verplicht";
-    } 
-    if (empty($data['com'])) {
-        $data['comErr'] = "Communicatievoorkeur is verplicht"; 
-    } 
-    if ($data['com'] =="E-mail") {
-        if (empty($data['email'])) {
-            $data['emailErr'] = "E-mailadres is verplicht";
-        }
-        else {
-            if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-                $data['emailErr'] = "Dit e-mailadres lijkt niet te kloppen";}
-        }        
-    }    
-    else if ($data['com'] =="Phone") {                                     
-        if (empty($data['phone'])) {
-            $data['phoneErr'] = "Telefoonnummer is verplicht";
-        }
-        else {
-            if (!preg_match('/^[0-9 -+]+$/', $data['phone'])) { 
-                $data['phoneErr'] = "Dit lijkt geen goed telefoonnummer";} 
-            }        
-    }       
-    $adress = false;
-    $adress = ($data['com'] =='Mail') || !empty($data['street']) || !empty($data['strnr']) || !empty($data['zpcd']) || !empty($data['resid']);
-    if ($adress) {                             
-        if (empty($data['street'])) {                  
-            $data['streetErr'] = "Staatnaam is verplicht";          
-        } 
-        if (empty($data['strnr'])) {
-            $data['strnrErr'] = "Huisnummer is verplicht";
-        }
-        if (empty($data['zpcd'])) {
-            $data['zpcdErr'] = "Postcode is verplicht";
-        } 
-        if (empty($data['resid'])) {
-            $data['residErr'] = "Woonplaats is verplicht";
-        }
-    }
-    if (empty($data['saludErr']) && empty($data['nameErr']) && empty($data['comErr']) && empty($data['emailErr']) && empty($data['phoneErr']) && empty($data['streetErr']) && empty($data['strnrErr']) && empty($data['zpcdErr']) && empty($data['residErr']) && empty($data['messageErr']))
-    {
-        $data['valid'] = true;
-    }
-    return $data;
-}    
-
 function showContactForm ($data)
 {
     echo '<form action="index.php" method="POST">
@@ -156,23 +59,7 @@ function showContactForm ($data)
                 <input type="hidden" name="page" value="contact">       
             </div>    
         </form>';
-}
-
-
-function showThanksNote ($data) 
-{ 
-    echo '<p> Uw reactie is verzonden. Bedankt voor het invullen!</p>';
-    echo '<p> U heeft het volgende ingevuld:' . '<br><br>';
-    echo 'Aanhef: ' . $data['salut'] . '<br>';
-    echo 'Naam: ' . $data['name'] . '<br>';
-    echo 'E-mailadres: ' . $data['email'] . '<br>';
-    echo 'Telefoonnummer: ' . $data['phone'] . '<br>';
-    echo 'Straatnaam: ' . $data['street'] . '<br>';
-    echo 'Huisnummer: ' . $data['strnr'] . '<br>';
-    echo 'Postcode: ' . $data['zpcd'] . '<br>';
-    echo 'Woonplaats: ' . $data['resid'] . '<br>';
-    echo 'Communicatievoorkeur: ' . $data['com'] . '<br>';
-    echo 'Vraag: ' . $data['message'] . '<br></p>';
+    return $data;
 }
 
 ?>

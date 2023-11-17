@@ -24,6 +24,7 @@ function processRequest($page)
     {
         case "contact":
             require_once ('validation.php');
+            validateContact();
             $data = validateContact();
             if ($data['valid']){
                 $page = 'thanks';
@@ -51,7 +52,7 @@ function processRequest($page)
             break;
         }
     $data['login'] = $_SESSION["login"];                   //Geeft aan dat het ongeïndentificeerd is, maar dat heb ik toch in de case gedaan?
-    $data['page']=$page;
+    $data['page']= $page;
     return $data;
     }
 
@@ -177,19 +178,19 @@ function showContent($data)
             break;
         case 'contact':
             require_once('contact.php');
-            showContactForm();                  //Werkt nog niet          
+            showContactForm($data);                  //Werkt nog niet          
             break;
         case 'register':
             require_once ('register.php');      //Werkt nog niet
-            showRegisterForm();
+            showRegisterForm($data);
             break;
         case 'login':
             require_once ('login.php');         //Werkt nog niet
-            showLoginForm();
+            showLoginForm($data);
             break;
         case 'thanks':                          //Werking nog niet vast te stellen
             require_oncde ('thanks.php');
-            showThanksContent ();
+            showThanksContent ($data);
             break;
         default:
             echo '<p>Pagina niet gevonden</P>';
