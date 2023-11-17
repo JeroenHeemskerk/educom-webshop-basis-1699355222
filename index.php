@@ -34,6 +34,7 @@ function processRequest($page)
             require_once ('validation.php');
             $data = validateRegister();
             if ($data['valid']){
+                require_once ('user_service.php');
                 storeUser($data['email'], $data['name'], $data['password']);
                 $page = 'login';
             }

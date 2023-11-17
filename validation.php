@@ -155,14 +155,8 @@ function validateRegisterData($data)
         $data['emailErr'] = "E-mailadres is verplicht";
     }
         else { 
-            while(!feof($file)){
-                $line = fget($file);
-                list($user, $name, $password) = explode ('|', $line);
-                if (trim($user) == $user_input) {
-                    $data['emailErr'] = 'Dit e-mailadres is al in gebruik'; 
-                    fclose('users.txt');
-                    }
-            }
+            require_once ('user_service.php');
+            checkUserExist($data);
             if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
                 $data['emailErr'] = "Dit e-mailadres lijkt niet te kloppen";}
         }               
@@ -225,33 +219,7 @@ function validateLoginData($data)
         $data['passwordErr'] = "Wachtwoord is verplicht";
     }                                                       
         else {
-            $user_input = $data["email"];
-            $password_input = $data["password"];
-
-            $file = fopen('users.txt', 'r');
-
-            $found = false;
-            while(!feof($file)){
-                $line = fget($file);
-                list($user, $name, $password) = explode ('|', $line);
-                if (trim($user) == $user_input) {
-                    $found = true;
-                    if (trim($password) == $password_input) {
-                    
-                        $data['valid'] = true;
-                        $data['name'] = $name;
-                    }
-                    else {
-                        $data['passwordErr'] = 'Uw wachtwoord klopt niet'; 
-                    }
-                    break;
-                }
-            }
-            if (!$found) {
-                $data['emailErr'] = 'Uw e-mailadres wordt niet herkend';
-            }
-
-            fclose('users.txt');
+            checkUserLogin (data$);
         }
     return $data;
 }
