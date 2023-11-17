@@ -71,19 +71,39 @@ function validateContactData($data)
             }        
     }       
     $adress = false;
-    $adress = ($data['com'] =='Mail') || !empty($data['street']) || !empty($data['strnr']) || !empty($data['zpcd']) || !empty($data['resid']);
-    if ($adress) {                             
-        if (empty($data['street'])) {                  
-            $data['streetErr'] = "Staatnaam is verplicht";          
-        } 
-        if (empty($data['strnr'])) {
+    $adress = ($data['com'] =='Mail');
+    $adressCom = false;
+    $adressCom = !empty($data['street']) && !empty($data['strnr']) && !empty($data['zpcd']) && !empty($data['resid']);                             
+    if (empty($data['street'])) { 
+        if ($adress) {                 
+            $data['streetErr'] = "Staatnaam is verplicht"; 
+        }
+        else if ($adressCom = false) {
+            $data['streetErr'] = "Uw adresgegevens zijn onvolledig";
+        }
+    }
+    if (empty($data['strnr'])) {
+        if ($adress) {
             $data['strnrErr'] = "Huisnummer is verplicht";
         }
-        if (empty($data['zpcd'])) {
+        else if ($adressCom = false) {
+            $data['strnrErr'] = "Uw adresgegevens zijn onvolledig";
+        }
+    }
+    if (empty($data['zpcd'])) {
+        if ($adress) {
             $data['zpcdErr'] = "Postcode is verplicht";
-        } 
-        if (empty($data['resid'])) {
+        }
+        else if ($adressCom = false) {
+            $data['zpcdErr'] = "Uw adresgegevens zijn onvolledig";
+        }
+    } 
+    if (empty($data['resid'])) {
+        if ($adress) {
             $data['residErr'] = "Woonplaats is verplicht";
+        }
+        else if ($adressCom = false) {
+            $data['residErr'] = "Uw adresgegevens zijn onvolledig";
         }
     }
     if (empty($data['saludErr']) && empty($data['nameErr']) && empty($data['comErr']) && empty($data['emailErr']) && empty($data['phoneErr']) && empty($data['streetErr']) && empty($data['strnrErr']) && empty($data['zpcdErr']) && empty($data['residErr']) && empty($data['messageErr']))

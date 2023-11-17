@@ -178,17 +178,17 @@ function showContent($data)
             break;
         case 'contact':
             require_once('contact.php');
-            showContactForm($data);                  //Werkt nog niet          
+            showContactForm($data);                           
             break;
         case 'register':
-            require_once ('register.php');      //Werkt nog niet
+            require_once ('register.php');      
             showRegisterForm($data);
             break;
         case 'login':
-            require_once ('login.php');         //Werkt nog niet
+            require_once ('login.php');         
             showLoginForm($data);
             break;
-        case 'thanks':                          //Werking nog niet vast te stellen
+        case 'thanks':                          //Werkt nog niet
             require_oncde ('thanks.php');
             showThanksContent ($data);
             break;
