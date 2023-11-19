@@ -8,13 +8,13 @@ function showContactHeader()
 function showContactForm ($data)
 {
     echo '<form action="index.php" method="POST">
-            <div class="invoervelden">' . PHP_EOL;
-    echo '      <label for="salut">Aanhef:</label>
+            <div class="invoervelden">
+                <label for="salut">Aanhef:</label>
                     <select class="sel" id="salut" name="salut">
                         <option value=""></option>  
-                        <option value="man"'; if ($data['salut'] == "man") { echo 'selected="selected"'; } echo '>Dhr.</option>
-                        <option value="woman"'; if ($data['salut'] == "woman") { echo 'selected="selected"'; } echo '>Mvr.</option>
-                        <option value="different"'; if ($data['salut'] == "different") { echo 'selected="selected"'; } echo '>Anders</option>
+                        <option value="man"' . ($data['salut'] == "man" ? 'selected="selected"' : ' ') . '>Dhr.</option>
+                        <option value="woman"' . ($data['salut'] == "woman" ? 'selected="selected"' : ' ') . '>Mvr.</option>
+                        <option value="different"' . ($data['salut'] == "different" ? 'selected="selected"' : ' ') . '>Anders</option>
                     </select>
                         <span class="error">' . $data['salutErr'] . '</span><br> 
                 <label for="fname">Naam:</label>

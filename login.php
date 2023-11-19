@@ -8,8 +8,8 @@ function showLoginHeader()
 function showLoginForm ($data)
 { 
     echo '<form action="index.php" method="POST"> 
-            <div class="invoervelden">' . PHP_EOL;
-    echo '      <label for="email">E-mailadres:</label>
+            <div class="invoervelden">
+                <label for="email">E-mailadres:</label>
                     <input class="sw" type="text" id="email" name="email" placeholder="Typ hier uw e-mailadres" value="' . $data['email'] . '" > 
                     <span class="error">' . $data['emailErr'] . '</span><br>
                 <label for="password">Wachtwoord:</label>

@@ -25,25 +25,26 @@ function processRequest($page)
         case "contact":
             require_once ('validation.php');
             $data = validateContact();
-            if ($data['valid']){                                                //geeft een error
+            if ($data['valid']){                                                
                 $page = 'thanks';
             }
             break;
         case "register":
             require_once ('validation.php');
             $data = validateRegister();
-            if ($data['valid']){                                                //geeft een error
-                require_once ('user_service.php');
-                storeUser($data['email'], $data['name'], $data['password']);
+            if ($data['valid']){                                                
+                //require_once ('user_service.php');
+                //storeUser($data['email'], $data['name'], $data['password']);          //Kan niet door permission denied (laten we even zitten)
                 $page = 'login';
             }
             break;  
         case "login":
             require_once ('validation.php');
             $data = validateLogin();
-            if ($data['valid']){                                                //geeft een error
+            if ($data['valid']){                                               
                 $_SESSION["login"] = true;
                 $page = 'home';
+                $_SESSION['name'] = $data['name'];
             }
             break;
         case "logout":
@@ -51,7 +52,7 @@ function processRequest($page)
             $page = 'home';
             break;
         }
-    $data['login'] = isset($_SESSION["login"]) && $_SESSION['login'];                                        //Geeft aan dat het ongeïndentificeerd is, maar dat heb ik toch in de case gedaan?
+    $data['login'] = isset($_SESSION["login"]) && $_SESSION['login'];                                        
     $data['page']= $page;
     return $data;
     }
@@ -140,7 +141,7 @@ function showMenu($data)
 {  
     $data['menu']= array('home' => 'Startpagina', 'about' => 'Over mij', 'contact' => 'Contact');  //nieuwe pagina's kunnen hier toegevoegd worden
     if ($data["login"]) {                                                                          
-        $items['menu']['logout'] = $_SESSION["name"].' uitloggen';
+        $data['menu']['logout'] = $_SESSION['name'] . ' uitloggen';
     } else {
         $data['menu']['register'] = 'Aanmelden' ; $data['menu']['login'] = 'Inloggen'; 
     }

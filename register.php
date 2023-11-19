@@ -8,8 +8,8 @@ function showRegisterHeader()
 function showRegisterForm ($data)
 { 
     echo '<form action="index.php" method="POST"> 
-            <div class="invoervelden">' . PHP_EOL;
-    echo '      <label for="fname">Naam:</label>
+            <div class="invoervelden">
+                <label for="fname">Naam:</label>
                     <input class="sw" type="text" id="fname" name="name" placeholder="Typ hier uw naam" value="' . $data['name'] . '">
                     <span class="error">' . $data['nameErr'] . '</span><br>                
                 <label for="email">E-mailadres:</label>

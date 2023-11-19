@@ -72,13 +72,13 @@ function validateContactData($data)
             }        
     }       
     
-    $adressCom = false;
-    $adressCom = !empty($data['street']) && !empty($data['strnr']) && !empty($data['zpcd']) && !empty($data['resid']);                             
+    $adressIncomplete = false;
+    $adressIncomplete = !empty($data['street']) || !empty($data['strnr']) || !empty($data['zpcd']) || !empty($data['resid']);                             
     if (empty($data['street'])) { 
         if ($data['com'] =='Mail') {                 
             $data['streetErr'] = "Staatnaam is verplicht"; 
         }
-        else if ($adressCom = false) {
+        else if ($adressIncomplete) {
             $data['streetErr'] = "Uw adresgegevens zijn onvolledig";
         }
     }
@@ -86,7 +86,7 @@ function validateContactData($data)
         if ($data['com'] =='Mail') {
             $data['strnrErr'] = "Huisnummer is verplicht";
         }
-        else if ($adressCom = false) {
+        else if ($adressIncomplete) {
             $data['strnrErr'] = "Uw adresgegevens zijn onvolledig";
         }
     }
@@ -94,7 +94,7 @@ function validateContactData($data)
         if ($data['com'] =='Mail') {
             $data['zpcdErr'] = "Postcode is verplicht";
         }
-        else if ($adressCom = false) {
+        else if ($adressIncomplete) {
             $data['zpcdErr'] = "Uw adresgegevens zijn onvolledig";
         }
     } 
@@ -102,7 +102,7 @@ function validateContactData($data)
         if ($data['com'] =='Mail') {
             $data['residErr'] = "Woonplaats is verplicht";
         }
-        else if ($adressCom = false) {
+        else if ($adressIncomplete) {
             $data['residErr'] = "Uw adresgegevens zijn onvolledig";
         }
     }
@@ -152,10 +152,20 @@ function validateRegisterData($data)
     } 
     if (empty($data['email'])) {
         $data['emailErr'] = "E-mailadres is verplicht";
-    }
-        else { 
-            require_once ('user_service.php');
-            checkUserExist($data);
+    } else { 
+            //require_once ('user_service.php');                        Dit werkt niet, maar ik kan de vinger er niet op leggen. 
+            //checkUserExist($data);  
+            $email_input = $data["email"];                              //Zo werkt het wel
+            $file = fopen('users.txt', 'r');
+            while(!feof($file)){
+                $line = fgets($file);
+                list($email, $name, $password) = explode ('|', $line);
+                if (trim($email) == $email_input) {
+                    $data['emailErr'] = 'Dit e-mailadres is al in gebruik'; 
+                    break;
+                 }
+            }
+            fclose($file);                                  
             if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
                 $data['emailErr'] = "Dit e-mailadres lijkt niet te kloppen";}
         }               
@@ -217,9 +227,33 @@ function validateLoginData($data)
         $data['passwordErr'] = "Wachtwoord is verplicht";
     }                                                       
     else {
-        require_once ('user_service.php');
-        checkUserLogin($data);                                                      //dit lijkt niet te gebeuren
+        //require_once ('user_service.php');
+        //checkUserLogin($data);                                                       //dit lijkt niet te gebeuren, ik doe iets fout met 
+        $email_input = $data["email"];                                                 // Dit werkt wel. 
+        $password_input = $data["password"];
+            $file = fopen('users.txt', 'r');
+            $found = false;
+            while(!feof($file)){
+                $line = fgets($file);
+                list($email, $name, $password) = explode ('|', $line);
+                if (trim($email) == $email_input) {
+                    $found = true;
+                    if (trim($password) == $password_input) {
+                        $data['valid'] = true;
+                        $data['name'] = $name;
+                    }
+                    else {
+                        $data['passwordErr'] = 'Uw wachtwoord klopt niet'; 
+                    }
+                    break;
+                }
+            }
+            if (!$found) {
+                $data['emailErr'] = 'Uw e-mailadres wordt niet herkend';
+            }
+            return $data;
     }
     return $data;
+    }
 }
 ?>
